@@ -10,9 +10,7 @@
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.1.4",
-    "@fontsource-variable/source-code-pro": "^5.1.1",
     "@fontsource-variable/space-grotesk": "^5.1.1",
-    "@fontsource/ibm-plex-mono": "^5.1.1",
     "@fontsource/space-mono": "^5.1.2",
     "@iconify-json/mdi": "^1.2.2",
     "astro": "^5.1.7",

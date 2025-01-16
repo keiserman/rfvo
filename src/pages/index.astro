@@ -3,13 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import ryanPortrait from "./src/assets/ryan-portrait.jpg";
+import Audio from "../components/Audio.astro";
 ---
 
 <Layout>
   <section
     class="py-20 px-6 text-white bg-gradient-to-b from-violet-950 to-zinc-950"
   >
-    <div class="max-w-screen-lg m-auto">
+    <div class="max-w-xl m-auto">
       <div class="flex flex-col items-center justify-center gap-4 text-center">
         <Image
           class="w-48 h-48 rounded-full object-cover"
@@ -45,9 +46,43 @@ import ryanPortrait from "./src/assets/ryan-portrait.jpg";
       </div>
     </div>
   </section>
-  <section class="py-12 px-6 text-zinc-300">
-    <div class="max-w-screen-sm m-auto border border-zinc-800 p-6 rounded-md">
-      <div class="text-lg text-center">Listen to some snippets below</div>
+  <section class="py-2 px-6">
+    <div class="max-w-xl m-auto flex flex-col gap-4">
+      <h2 class="text-lg text-center text-zinc-300">
+        Listen to some snippets below
+      </h2>
+      <Audio />
+      <Audio />
+      <Audio />
+      <Audio />
     </div>
   </section>
+  <section class="py-16 px-6">
+    <div class="max-w-xl m-auto flex flex-col gap-4">
+      <h2 class="text-2xl text-center">
+        Ryan is a Long Island based voice actor whose voice over capabilities
+        have no limit.
+      </h2>
+      <p class="text-base text-center text-zinc-400">
+        From singing multiple genres such as rock, alternative, pop and
+        cappella—to narrating commercials and videos. Ryan has a voice that
+        adapts to whatever is needed. Excited, informative, compassionate,
+        relatable…let Ryan add the emotion behind the words needed to represent
+        your company or character!
+      </p>
+    </div>
+  </section>
+  <footer class="p-6 text-zinc-500 border-t border-zinc-800">
+    <div class="max-w-xl m-auto text-center text-sm">
+      © Copyright <span id="copyright-date"></span> Ryan Ferraro
+    </div>
+  </footer>
 </Layout>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyright = document.querySelector("#copyright-date");
+    if (copyright) {
+      copyright.textContent = new Date().getFullYear().toString();
+    }
+  });
+</script>
