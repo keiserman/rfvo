@@ -12,11 +12,15 @@ import Audio from "../components/Audio.astro";
   >
     <div class="max-w-xl m-auto">
       <div class="flex flex-col items-center justify-center gap-4 text-center">
-        <Image
-          class="w-48 h-48 rounded-full object-cover"
-          src={ryanPortrait}
-          alt="Ryan Portrait"
-        />
+        <div
+          class="w-48 h-48 rounded-full overflow-hidden border-8 border-white/10"
+        >
+          <Image
+            class="w-full object-cover hover:scale-110 transition"
+            src={ryanPortrait}
+            alt="Ryan Portrait"
+          />
+        </div>
         <div class="flex flex-col items-center justify-center gap-4">
           <h1 class="text-4xl">Ryan Ferraro</h1>
           <div class="text-md font-mono text-zinc-400">
@@ -48,7 +52,7 @@ import Audio from "../components/Audio.astro";
   </section>
   <section class="py-2 px-6">
     <div class="max-w-xl m-auto flex flex-col gap-4">
-      <h2 class="text-lg text-center text-zinc-300">
+      <h2 class="text-2xl text-center text-zinc-300">
         Listen to some snippets below
       </h2>
       <Audio />
