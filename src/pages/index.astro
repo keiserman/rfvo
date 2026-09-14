@@ -4,9 +4,32 @@ import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import ryanPortrait from "../assets/ryan-portrait.jpg";
 import Audio from "../components/Audio.astro";
+
+const demos = [
+  { title: "Coleman Campsite", src: "/audio/rf-demo1.mp3" },
+  { title: "Pet Care", src: "/audio/rf-demo2.mp3" },
+  { title: "Heartfelt", src: "/audio/rf-demo3.mp3" },
+  { title: "Techie", src: "/audio/rf-demo4.mp3" },
+  { title: "Excitement!", src: "/audio/rf-demo5.mp3" },
+  { title: "Adventure Awaits", src: "/audio/rf-demo6.mp3" },
+  { title: "Friend of Nathans", src: "/audio/rf-demo7.mp3" },
+];
 ---
 
 <Layout>
+  <header
+    class="sticky top-0 z-10 bg-zinc-950/80 backdrop-blur border-b border-zinc-800"
+  >
+    <nav
+      class="max-w-xl m-auto flex items-center justify-between px-6 py-4 text-sm font-mono text-zinc-300"
+    >
+      <a href="/" class="hover:text-white transition">Ryan Ferraro</a>
+      <div class="flex gap-6">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="#demos" class="hover:text-white transition">Demos</a>
+      </div>
+    </nav>
+  </header>
   <section
     class="py-20 px-6 text-white bg-gradient-to-b from-violet-950 to-zinc-950"
   >
@@ -50,12 +73,12 @@ import Audio from "../components/Audio.astro";
       </div>
     </div>
   </section>
-  <section class="py-2 px-6">
+  <section id="demos" class="py-2 px-6 scroll-mt-20">
     <div class="max-w-xl m-auto flex flex-col gap-4">
       <h2 class="text-2xl text-center text-zinc-300">
         Listen to some snippets below
       </h2>
-      <Audio />
+      {demos.map((demo) => <Audio title={demo.title} src={demo.src} />)}
     </div>
   </section>
   <section class="py-16 px-6">
