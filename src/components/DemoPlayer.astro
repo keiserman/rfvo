@@ -1,0 +1,125 @@
+---
+interface Props {
+  demos: { title: string; src: string }[];
+}
+
+const { demos } = Astro.props;
+---
+
+<div class="flex flex-col gap-4">
+  <div class="p-4 border border-zinc-800 bg-zinc-900 rounded-lg flex flex-col gap-3">
+    <div class="flex items-center gap-4">
+      <button
+        id="play-pause"
+        class="shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-violet-600 hover:bg-violet-500 transition text-white"
+        aria-label="Play"
+      >
+        <svg id="icon-play" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+        <svg id="icon-pause" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+      </button>
+      <div class="flex flex-col overflow-hidden">
+        <span id="current-title" class="text-sm text-white truncate">
+          {demos[0]?.title}
+        </span>
+        <span id="current-time" class="text-xs font-mono text-zinc-500">0:00 / 0:00</span>
+      </div>
+    </div>
+    <div id="waveform" class="cursor-pointer"></div>
+  </div>
+
+  <ul class="flex flex-col divide-y divide-zinc-800 border border-zinc-800 rounded-lg overflow-hidden">
+    {
+      demos.map((demo, i) => (
+        <li>
+          <button
+            class="track-btn w-full text-left px-4 py-3 text-sm text-zinc-300 hover:bg-zinc-800 transition flex items-center gap-3 data-[active=true]:bg-zinc-800 data-[active=true]:text-white"
+            data-src={demo.src}
+            data-title={demo.title}
+            data-active={i === 0 ? "true" : "false"}
+          >
+            <span class="font-mono text-xs text-zinc-500 w-5">{String(i + 1).padStart(2, "0")}</span>
+            <span>{demo.title}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import WaveSurfer from "wavesurfer.js";
+
+  const waveformEl = document.querySelector<HTMLElement>("#waveform");
+  const playPauseBtn = document.querySelector<HTMLButtonElement>("#play-pause");
+  const iconPlay = document.querySelector("#icon-play");
+  const iconPause = document.querySelector("#icon-pause");
+  const titleEl = document.querySelector("#current-title");
+  const timeEl = document.querySelector("#current-time");
+  const trackButtons = document.querySelectorAll<HTMLButtonElement>(".track-btn");
+
+  if (waveformEl && playPauseBtn) {
+    const wavesurfer = WaveSurfer.create({
+      container: waveformEl,
+      waveColor: "#52525b",
+      progressColor: "#8b5cf6",
+      cursorColor: "#a78bfa",
+      barWidth: 2,
+      barGap: 2,
+      barRadius: 2,
+      height: 56,
+    });
+
+    const formatTime = (seconds: number) => {
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60)
+        .toString()
+        .padStart(2, "0");
+      return `${m}:${s}`;
+    };
+
+    const setActiveButton = (btn: HTMLButtonElement) => {
+      trackButtons.forEach((b) => b.setAttribute("data-active", "false"));
+      btn.setAttribute("data-active", "true");
+    };
+
+    const loadTrack = (btn: HTMLButtonElement, autoplay: boolean) => {
+      const { src, title } = btn.dataset;
+      if (!src) return;
+      setActiveButton(btn);
+      if (titleEl) titleEl.textContent = title ?? "";
+      wavesurfer.load(src);
+      if (autoplay) {
+        wavesurfer.once("ready", () => wavesurfer.play());
+      }
+    };
+
+    trackButtons.forEach((btn) => {
+      btn.addEventListener("click", () => loadTrack(btn, true));
+    });
+
+    playPauseBtn.addEventListener("click", () => wavesurfer.playPause());
+
+    wavesurfer.on("play", () => {
+      iconPlay?.classList.add("hidden");
+      iconPause?.classList.remove("hidden");
+      playPauseBtn.setAttribute("aria-label", "Pause");
+    });
+    wavesurfer.on("pause", () => {
+      iconPause?.classList.add("hidden");
+      iconPlay?.classList.remove("hidden");
+      playPauseBtn.setAttribute("aria-label", "Play");
+    });
+    wavesurfer.on("timeupdate", (currentTime) => {
+      if (timeEl) timeEl.textContent = `${formatTime(currentTime)} / ${formatTime(wavesurfer.getDuration())}`;
+    });
+    wavesurfer.on("finish", () => {
+      const buttons = Array.from(trackButtons);
+      const currentIndex = buttons.findIndex((b) => b.dataset.active === "true");
+      const next = buttons[currentIndex + 1];
+      if (next) loadTrack(next, true);
+    });
+
+    const firstTrack = trackButtons[0];
+    if (firstTrack) loadTrack(firstTrack, false);
+  }
+</script>
