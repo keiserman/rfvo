@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import ryanPortrait from "../assets/ryan-portrait.jpg";
-import Audio from "../components/Audio.astro";
+import DemoPlayer from "../components/DemoPlayer.astro";
 
 const demos = [
   { title: "Coleman Campsite", src: "/audio/rf-demo1.mp3" },
@@ -78,7 +78,7 @@ const demos = [
       <h2 class="text-2xl text-center text-zinc-300">
         Listen to some snippets below
       </h2>
-      {demos.map((demo) => <Audio title={demo.title} src={demo.src} />)}
+      <DemoPlayer demos={demos} />
     </div>
   </section>
   <section class="py-16 px-6">
