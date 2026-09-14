@@ -87,9 +87,17 @@ const { demos } = Astro.props;
       if (!src) return;
       setActiveButton(btn);
       if (titleEl) titleEl.textContent = title ?? "";
+      // Set autoplay on the media element synchronously, in the same task as
+      // the click, so browsers (Safari in particular) still treat the eventual
+      // playback as a direct result of the user gesture rather than blocking
+      // it once decoding finishes on a later tick.
+      const mediaEl = wavesurfer.getMediaElement();
+      if (mediaEl) mediaEl.autoplay = autoplay;
       wavesurfer.load(src);
       if (autoplay) {
-        wavesurfer.once("ready", () => wavesurfer.play());
+        wavesurfer.once("ready", () => {
+          wavesurfer.play()?.catch(() => {});
+        });
       }
     };
 
